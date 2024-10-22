@@ -15,12 +15,15 @@ This repository contains a test suite for the Eneco project. The test suite incl
 
 You can install the required dependencies using the `install.py` script provided in the repository.
 
+#### Windows
 Run the following command to install the dependencies:
-
 ```bash
 python install.py
 ```
-
+### Linux and MacOS
+```bash
+python3 install.py
+```
 ### Configuration
 
 Ensure you have the necessary configuration files in place. For example, the `json_repo` directory should contain the `users.json` file with the test data.
