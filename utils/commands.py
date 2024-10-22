@@ -102,7 +102,7 @@ def get_user_posts(user_id, check: Check):
 
     check(response.status_code == 200, "Expected status code 200 for successful retrieval of user posts")
 
-    if isinstance(response.json(), list):
+    if not isinstance(response.json(), list):  # Handle the case where the API returns an error message
         check(False, f"Failed to retrieve user posts: {response.json()}")
 
     return response.json()
@@ -119,7 +119,7 @@ def get_post_comments(post_id, check: Check):
 
     check(response.status_code == 200, "Expected status code 200 for successful retrieval of post comments")
 
-    if isinstance(response.json(), list):
+    if not isinstance(response.json(), list):  # Handle the case where the API returns an error message
         check(False, f"Failed to retrieve post comments: {response.json()}")
 
     return response.json()
@@ -136,7 +136,7 @@ def get_user_todos(user_id, check: Check):
 
     check(response.status_code == 200, "Expected status code 200 for successful retrieval of user todos")
 
-    if isinstance(response.json(), list):
+    if not isinstance(response.json(), list):  # Handle the case where the API returns an error message
         check(False, f"Failed to retrieve user todos: {response.json()}")
 
     return response.json()
@@ -153,7 +153,7 @@ def create_user_post(user_id, post_data, check: Check):
 
     check(response.status_code == 201, "Expected status code 201 for successful post creation")
 
-    if isinstance(response.json(), list):
+    if isinstance(response.json(), list):  # Handle the case where the API returns an error message
         check(False, f"Failed to create user post: {response.json()}")
 
     return response.json()
@@ -170,24 +170,19 @@ def create_post_comment(post_id, comment_data, check: Check):
 
     check(response.status_code == 201, "Expected status code 201 for successful comment creation")
 
-    if isinstance(response.json(), list):
+    if isinstance(response.json(), list):  # Handle the case where the API returns an error message
         check(False, f"Failed to create post comment: {response.json()}")
 
     return response.json()
 
-def create_user_todo(user_id, todo_data, check: Check):
+def cleanup_user(user_id, check: Check):
     """
-    Function to create a todo for a user by user ID.
-    Returns the created todo details as a JSON object.
+    Function to clean up by deleting the created user.
     """
-    logger.info("Creating todo for user with ID: %s and data: %s", user_id, todo_data)
+    if user_id:
+        delete_user(user_id, check)
+        logger.info("User deleted successfully with ID: %s", user_id)
 
-    response = requests.post(f"{BASE_URL}/users/{user_id}/todos", headers=HEADERS, json=todo_data)
-    logger.info("Create User Todo Response: %s", response.json())
-
-    check(response.status_code == 201, "Expected status code 201 for successful todo creation")
-
-    if isinstance(response.json(), list):
-        check(False, f"Failed to create user todo: {response.json()}")
-
-    return response.json()
+        # Consume and print errors if any during deletion
+        errors = check.consume_errors()
+        check(not errors, f"Errors occurred during deletion: {errors}")

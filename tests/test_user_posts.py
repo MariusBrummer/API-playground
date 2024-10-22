@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 import pytest
 import uuid
-from utils.commands import create_user, create_user_post, delete_user
+from utils.commands import create_user, create_user_post, get_user_posts, cleanup_user
 from utils.check import Check
 import logging
 
@@ -53,11 +53,27 @@ def test_create_user_post(test_data):
     errors = check.consume_errors()
     check(not errors, f"Errors occurred: {errors}")
 
-    # # Clean up by deleting the created user
-    # if user_id:
-    #     delete_user(user_id, check)
-    #     logger.info("User deleted successfully with ID: %s", user_id)
+    # Return user_id and post_data for use in other tests
+    return user_id, post_data
 
-    #     # Consume and print errors if any during deletion
-    #     errors = check.consume_errors()
-    #     check(not errors, f"Errors occurred during deletion: {errors}")
+def test_get_user_posts(test_data):
+    """
+    Test the get_user_posts function.
+    """
+    # Use the user and post created in the test_create_user_post function
+    user_id, post_data = test_create_user_post(test_data)
+    check = Check()
+
+    # Retrieve the posts for the user
+    user_posts = get_user_posts(user_id, check)
+    check(len(user_posts) > 0, "User should have at least one post")
+    check(user_posts[0]["title"] == post_data["title"], "Retrieved post title should match the created post title")
+    check(user_posts[0]["body"] == post_data["body"], "Retrieved post body should match the created post body")
+    logger.info("User posts retrieved successfully for user ID: %s", user_id)
+
+    # Consume and print errors if any
+    errors = check.consume_errors()
+    check(not errors, f"Errors occurred: {errors}")
+
+    # Clean up by deleting the created user
+    cleanup_user(user_id, check)
