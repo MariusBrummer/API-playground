@@ -89,3 +89,105 @@ def update_user_details(user_id, user_data, check: Check):
         check(False, f"Failed to update user: {response.json()}")
 
     return response.json()
+
+def get_user_posts(user_id, check: Check):
+    """
+    Function to retrieve posts for a user by user ID.
+    Returns the list of posts as a JSON object.
+    """
+    logger.info("Retrieving posts for user with ID: %s", user_id)
+
+    response = requests.get(f"{BASE_URL}/users/{user_id}/posts", headers=HEADERS)
+    logger.info("Get User Posts Response: %s", response.json())
+
+    check(response.status_code == 200, "Expected status code 200 for successful retrieval of user posts")
+
+    if isinstance(response.json(), list):
+        check(False, f"Failed to retrieve user posts: {response.json()}")
+
+    return response.json()
+
+def get_post_comments(post_id, check: Check):
+    """
+    Function to retrieve comments for a post by post ID.
+    Returns the list of comments as a JSON object.
+    """
+    logger.info("Retrieving comments for post with ID: %s", post_id)
+
+    response = requests.get(f"{BASE_URL}/posts/{post_id}/comments", headers=HEADERS)
+    logger.info("Get Post Comments Response: %s", response.json())
+
+    check(response.status_code == 200, "Expected status code 200 for successful retrieval of post comments")
+
+    if isinstance(response.json(), list):
+        check(False, f"Failed to retrieve post comments: {response.json()}")
+
+    return response.json()
+
+def get_user_todos(user_id, check: Check):
+    """
+    Function to retrieve todos for a user by user ID.
+    Returns the list of todos as a JSON object.
+    """
+    logger.info("Retrieving todos for user with ID: %s", user_id)
+
+    response = requests.get(f"{BASE_URL}/users/{user_id}/todos", headers=HEADERS)
+    logger.info("Get User Todos Response: %s", response.json())
+
+    check(response.status_code == 200, "Expected status code 200 for successful retrieval of user todos")
+
+    if isinstance(response.json(), list):
+        check(False, f"Failed to retrieve user todos: {response.json()}")
+
+    return response.json()
+
+def create_user_post(user_id, post_data, check: Check):
+    """
+    Function to create a post for a user by user ID.
+    Returns the created post details as a JSON object.
+    """
+    logger.info("Creating post for user with ID: %s and data: %s", user_id, post_data)
+
+    response = requests.post(f"{BASE_URL}/users/{user_id}/posts", headers=HEADERS, json=post_data)
+    logger.info("Create User Post Response: %s", response.json())
+
+    check(response.status_code == 201, "Expected status code 201 for successful post creation")
+
+    if isinstance(response.json(), list):
+        check(False, f"Failed to create user post: {response.json()}")
+
+    return response.json()
+
+def create_post_comment(post_id, comment_data, check: Check):
+    """
+    Function to create a comment for a post by post ID.
+    Returns the created comment details as a JSON object.
+    """
+    logger.info("Creating comment for post with ID: %s and data: %s", post_id, comment_data)
+
+    response = requests.post(f"{BASE_URL}/posts/{post_id}/comments", headers=HEADERS, json=comment_data)
+    logger.info("Create Post Comment Response: %s", response.json())
+
+    check(response.status_code == 201, "Expected status code 201 for successful comment creation")
+
+    if isinstance(response.json(), list):
+        check(False, f"Failed to create post comment: {response.json()}")
+
+    return response.json()
+
+def create_user_todo(user_id, todo_data, check: Check):
+    """
+    Function to create a todo for a user by user ID.
+    Returns the created todo details as a JSON object.
+    """
+    logger.info("Creating todo for user with ID: %s and data: %s", user_id, todo_data)
+
+    response = requests.post(f"{BASE_URL}/users/{user_id}/todos", headers=HEADERS, json=todo_data)
+    logger.info("Create User Todo Response: %s", response.json())
+
+    check(response.status_code == 201, "Expected status code 201 for successful todo creation")
+
+    if isinstance(response.json(), list):
+        check(False, f"Failed to create user todo: {response.json()}")
+
+    return response.json()
