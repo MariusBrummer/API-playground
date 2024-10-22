@@ -1,13 +1,18 @@
+import os
 import requests
 import uuid
 from utils.check import Check
 import logging
+from dotenv import load_dotenv
+
+# Load environment variables from .env file if present
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 
 BASE_URL = "https://gorest.co.in/public/v2"
 HEADERS = {
-    "Authorization": "Bearer 640b294f4d7cf7839ac83d4c2f6ddaa056babdc9be0b7448bfbb71aebb2cd147",
+    "Authorization": f"Bearer {os.getenv('GOREST_BEARER_TOKEN')}",
     "Accept": "application/json"
 }
 
