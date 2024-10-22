@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 import pytest
-from utils.commands import create_user, get_user_by_id, delete_user
+from utils.commands import create_user, get_user_by_id, cleanup_user
 from utils.check import Check
 import logging
 
@@ -47,10 +47,4 @@ def test_get_user_by_id(test_data):
     check(not errors, f"Errors occurred: {errors}")
 
     # Clean up by deleting the created user
-    if user_id:
-        delete_user(user_id, check)
-        logger.info("User deleted successfully with ID: %s", user_id)
-
-        # Consume and print errors if any during deletion
-        errors = check.consume_errors()
-        check(not errors, f"Errors occurred during deletion: {errors}")
+    cleanup_user(user_id, check)

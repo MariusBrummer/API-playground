@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 import pytest
 import uuid
-from utils.commands import create_user, create_user_post, create_post_comment, delete_user
+from utils.commands import create_user, create_user_post, create_post_comment, get_post_comments,  cleanup_user
 from utils.check import Check
 import logging
 
@@ -61,9 +61,9 @@ def test_create_user_comment(test_data):
 
     # Create a comment for the post
     comment_data = {
-        "name": "Hiranya Somayaji IV",
+        "name": "Test User Comments",
         "email": f"{uuid.uuid4()}@example.com",
-        "body": "Iste ducimus iusto. Ratione similique aut."
+        "body": "Sample comment body."
     }
     created_comment = create_post_comment(post_id, comment_data, check)
 
@@ -81,11 +81,27 @@ def test_create_user_comment(test_data):
     errors = check.consume_errors()
     check(not errors, f"Errors occurred: {errors}")
 
-    # Clean up by deleting the created user
-    if user_id:
-        delete_user(user_id, check)
-        logger.info("User deleted successfully with ID: %s", user_id)
+    # Return user_id and post_id for use in other tests
+    return user_id, post_id
 
-        # Consume and print errors if any during deletion
-        errors = check.consume_errors()
-        check(not errors, f"Errors occurred during deletion: {errors}")
+def test_get_user_comments(test_data):
+    """
+    Test the get_post_comments function.
+    """
+    # Use the user and post created in the test_create_user_comment function
+    user_id, post_id = test_create_user_comment(test_data)
+    check = Check()
+
+    # Retrieve the comments for the post
+    post_comments = get_post_comments(post_id, check)
+    check(len(post_comments) > 0, "Post should have at least one comment")
+    check(post_comments[0]["name"] == "Test User Comments", "Retrieved comment name should match the created comment name")
+    check(post_comments[0]["body"] == "Sample comment body.", "Retrieved comment body should match the created comment body")
+    logger.info("Post comments retrieved successfully for post ID: %s", post_id)
+ 
+    # Consume and print errors if any
+    errors = check.consume_errors()
+    check(not errors, f"Errors occurred: {errors}")
+
+    # Clean up by deleting the created user
+    cleanup_user(user_id, check)
