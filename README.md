@@ -36,8 +36,10 @@ The test suite is organized as follows:
   - `test_create_user.py`: Tests for creating a user.
   - `test_get_user_by_id.py`: Tests for retrieving a user by ID.
   - `test_update_user.py`: Tests for updating user details.
+  - `test_user_posts.py`: Tests for creating and getting user posts.
+  - `test_user_comments`: Tests for creating and getting comments.
 - `utils/`: Contains utility functions and classes.
-  - `commands.py`: Contains functions to interact with the API (create, get, update, delete users).
+  - `commands.py`: Contains functions to interact with the API (create, get, update, delete users, cleanup_user).
   - `check.py`: Contains the `Check` class for assertions.
 
 ## How to Execute the Tests
