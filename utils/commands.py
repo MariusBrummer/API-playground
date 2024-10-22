@@ -55,3 +55,37 @@ def get_user_by_id(user_id, check: Check):
         check(False, f"Failed to retrieve user: {response.json()}")
 
     return response.json()
+
+def delete_user(user_id, check: Check):
+    """
+    Function to delete a user by user ID.
+    Returns a success message if the user is deleted.
+    """
+    logger.info("Deleting user with ID: %s", user_id)  # Log the user ID being deleted
+
+    response = requests.delete(f"{BASE_URL}/users/{user_id}", headers=HEADERS)
+    logger.info("Delete User Response: %s", response.status_code)  # Log the response status code for debugging
+
+    check(response.status_code == 204, "Expected status code 204 for successful user deletion")
+
+    if response.status_code != 204:  # Handle the case where the API returns an error message
+        check(False, f"Failed to delete user: {response.json()}")
+
+    return "User successfully deleted"
+
+def update_user_details(user_id, user_data, check: Check):
+    """
+    Function to update user details by user ID.
+    Returns the updated user details as a JSON object.
+    """
+    logger.info("Updating user with ID: %s and data: %s", user_id, user_data)  # Log the user ID and data being updated
+
+    response = requests.put(f"{BASE_URL}/users/{user_id}", headers=HEADERS, json=user_data)
+    logger.info("Update User Response: %s", response.json())  # Log the response for debugging
+
+    check(response.status_code == 200, "Expected status code 200 for successful user update")
+
+    if isinstance(response.json(), list):  # Handle the case where the API returns an error message
+        check(False, f"Failed to update user: {response.json()}")
+
+    return response.json()

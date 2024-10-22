@@ -1,7 +1,8 @@
 import json
 from pathlib import Path
 import pytest
-from utils.commands import create_user, delete_user
+import uuid
+from utils.commands import create_user, update_user_details, delete_user
 from utils.check import Check
 import logging
 
@@ -24,19 +25,30 @@ def test_data(request):
         logger.info("Test data loaded: %s", data)
         yield data
 
-def test_create_user(test_data):
+def test_update_user_details(test_data):
     """
-    Test the create_user function.
+    Test the update_user_details function.
     """
     user_data = test_data["users"][0]  # Use the first user in the JSON file
     check = Check()
 
-    # Call the create_user function
-    user_id, response_data = create_user(user_data, check)
+    # Call the create_user function to create a user
+    user_id, _ = create_user(user_data, check)
 
     check(user_id is not None, "User ID should not be None")
-    check(response_data is not None, "Response data should not be None")
     logger.info("User created successfully with ID: %s", user_id)
+
+    # Update the user details
+    updated_data = {
+        "name": "Updated Name",
+        "email": f"{uuid.uuid4()}@example.com",
+        "gender": "male",
+        "status": "active"
+    }
+    updated_user_details = update_user_details(user_id, updated_data, check)
+    check(updated_user_details["name"] == updated_data["name"], "User name should be updated")
+    check(updated_user_details["email"] == updated_data["email"], "User email should be updated")
+    logger.info("User updated successfully with ID: %s", user_id)
 
     # Consume and print errors if any
     errors = check.consume_errors()

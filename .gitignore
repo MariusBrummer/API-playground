@@ -1,0 +1,74 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+lib/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Pytest cache
+.pytest_cache/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# Virtualenv and Python environment
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook files
+.ipynb_checkpoints
+
+# PyCharm project files
+.idea/
+
+# VSCode project files
+.vscode/
+
+# MacOS file
+.DS_Store
+
+# Log files
+*.log
+
+# Config files or sensitive data
+*.env
+*.secret
+*.key
+
+# Ignore json_repo contents (optional if generated or sensitive data)
+json_repo/*.json
+
+# Ignore build artifacts
+build/
+dist/
