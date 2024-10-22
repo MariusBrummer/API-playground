@@ -28,6 +28,14 @@ python3 install.py
 
 Ensure you have the necessary configuration files in place. For example, the `json_repo` directory should contain the `users.json` file with the test data.
 
+### Environment Variables
+
+Create a .env file in the root directory of the project and add the following environment variables:
+
+```bash
+GOREST_BEARER_TOKEN=<your_bearer_token>
+
+
 ## Test Suite Structure
 
 The test suite is organized as follows:
