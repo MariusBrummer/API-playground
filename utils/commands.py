@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 BASE_URL = "https://gorest.co.in/public/v2"
 HEADERS = {
-    "Authorization": "Bearer 57621ecf98c8e77b78140f5cf2a77ce536fd44f535f19ca904fb87b1803492c4",
+    "Authorization": "Bearer 640b294f4d7cf7839ac83d4c2f6ddaa056babdc9be0b7448bfbb71aebb2cd147",
     "Accept": "application/json"
 }
 

@@ -3,7 +3,13 @@
         {
             "email": "testuser1@example.com",
             "gender": "male",
-            "name": "Test User",
+            "name": "Test Male User",
+            "status": "active"
+        },
+        {
+            "email": "testuser1@example.com",
+            "gender": "female",
+            "name": "Test Female User",
             "status": "active"
         }
     ]
