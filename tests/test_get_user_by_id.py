@@ -10,6 +10,7 @@ json_repo_dir = Path("json_repo")
 
 logger = logging.getLogger(__name__)
 
+
 @pytest.fixture(scope="module", params=["users.json"])
 def test_data(request):
     """
@@ -23,6 +24,7 @@ def test_data(request):
         data = json.load(f)
         logger.info("Test data loaded: %s", data)
         yield data
+
 
 def test_get_user_by_id(test_data):
     """
@@ -39,7 +41,8 @@ def test_get_user_by_id(test_data):
 
     # Retrieve the user by ID
     user_details = get_user_by_id(user_id, check)
-    check(user_details["id"] == user_id, "Retrieved user ID should match the created user ID")
+    check(user_details["id"] == user_id,
+          "Retrieved user ID should match the created user ID")
     logger.info("User retrieved successfully with ID: %s", user_id)
 
     # Consume and print errors if any

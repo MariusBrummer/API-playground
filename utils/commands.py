@@ -11,6 +11,7 @@ HEADERS = {
     "Accept": "application/json"
 }
 
+
 def create_user(user_data, check: Check):
     """
     Function to create a user using the provided data.
@@ -35,9 +36,11 @@ def create_user(user_data, check: Check):
 
     # Assert that the email in the response matches the email sent in the request
     response_email = response.json().get("email")
-    check(response_email == unique_email, "Email in the response should match the email sent in the request")
-    
+    check(response_email == unique_email,
+          "Email in the response should match the email sent in the request")
+
     return user_id, response.json()
+
 
 def get_user_by_id(user_id, check: Check):
     """
@@ -56,6 +59,7 @@ def get_user_by_id(user_id, check: Check):
 
     return response.json()
 
+
 def delete_user(user_id, check: Check):
     """
     Function to delete a user by user ID.
@@ -72,6 +76,7 @@ def delete_user(user_id, check: Check):
         check(False, f"Failed to delete user: {response.json()}")
 
     return "User successfully deleted"
+
 
 def update_user_details(user_id, user_data, check: Check):
     """
@@ -90,6 +95,7 @@ def update_user_details(user_id, user_data, check: Check):
 
     return response.json()
 
+
 def get_user_posts(user_id, check: Check):
     """
     Function to retrieve posts for a user by user ID.
@@ -106,6 +112,7 @@ def get_user_posts(user_id, check: Check):
         check(False, f"Failed to retrieve user posts: {response.json()}")
 
     return response.json()
+
 
 def get_post_comments(post_id, check: Check):
     """
@@ -124,6 +131,7 @@ def get_post_comments(post_id, check: Check):
 
     return response.json()
 
+
 def get_user_todos(user_id, check: Check):
     """
     Function to retrieve todos for a user by user ID.
@@ -140,6 +148,7 @@ def get_user_todos(user_id, check: Check):
         check(False, f"Failed to retrieve user todos: {response.json()}")
 
     return response.json()
+
 
 def create_user_post(user_id, post_data, check: Check):
     """
@@ -158,6 +167,7 @@ def create_user_post(user_id, post_data, check: Check):
 
     return response.json()
 
+
 def create_post_comment(post_id, comment_data, check: Check):
     """
     Function to create a comment for a post by post ID.
@@ -174,6 +184,7 @@ def create_post_comment(post_id, comment_data, check: Check):
         check(False, f"Failed to create post comment: {response.json()}")
 
     return response.json()
+
 
 def cleanup_user(user_id, check: Check):
     """
