@@ -34,6 +34,7 @@ Create a .env file in the root directory of the project and add the following en
 
 ```bash
 GOREST_BEARER_TOKEN=<your_bearer_token>
+``
 
 
 ## Test Suite Structure
