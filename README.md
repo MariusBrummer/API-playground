@@ -20,7 +20,7 @@ Run the following command to install the dependencies:
 ```bash
 python install.py
 ```
-### Linux and MacOS
+### Linux and MacOS (NOT TESTED ON THESE PLATFORMS)
 ```bash
 python3 install.py
 ```
