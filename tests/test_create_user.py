@@ -10,6 +10,7 @@ json_repo_dir = Path("json_repo")
 
 logger = logging.getLogger(__name__)
 
+
 @pytest.fixture(scope="module", params=["users.json"])
 def test_data(request):
     """
@@ -23,6 +24,7 @@ def test_data(request):
         data = json.load(f)
         logger.info("Test data loaded: %s", data)
         yield data
+
 
 def test_create_user(test_data):
     """

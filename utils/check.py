@@ -35,7 +35,7 @@ class Check:
                 local_vars = "\n".join(
                     [
                         f"\t {key}={value}"
-                        for key, value in frame.f_back.f_locals.items()  # type: ignore
+                        for key, value in frame.f_back.f_locals.items()
                     ]
                 )
                 self._errors.append(f"{message} \n{local_vars} \n")

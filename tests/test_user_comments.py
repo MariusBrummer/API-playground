@@ -2,7 +2,8 @@ import json
 from pathlib import Path
 import pytest
 import uuid
-from utils.commands import create_user, create_user_post, create_post_comment, get_post_comments,  cleanup_user
+from utils.commands import (create_user, create_user_post, create_post_comment,
+                            get_post_comments, cleanup_user)
 from utils.check import Check
 import logging
 
@@ -10,6 +11,7 @@ import logging
 json_repo_dir = Path("json_repo")
 
 logger = logging.getLogger(__name__)
+
 
 @pytest.fixture(scope="module", params=["users.json"])
 def test_data(request):
@@ -24,6 +26,7 @@ def test_data(request):
         data = json.load(f)
         logger.info("Test data loaded: %s", data)
         yield data
+
 
 def test_create_user_comment(test_data):
     """
@@ -53,9 +56,11 @@ def test_create_user_comment(test_data):
         logger.error("Post creation failed: %s", created_post)
         pytest.fail("Post creation failed due to invalid token")
 
-    check(created_post["title"] == post_data["title"], "Post title should be created correctly")
-    check(created_post["body"] == post_data["body"], "Post body should be created correctly")
-    check(created_post["id"] is not None, "Post ID should not be None or empty")
+    check(created_post["title"] == post_data["title"],
+          "Post title should be created correctly")
+    check(created_post["body"] == post_data["body"],
+          "Post body should be created correctly")
+    check(created_post["id"] is not None, "Post ID should not be None")
     post_id = created_post["id"]
     logger.info("Post created successfully for user ID: %s", user_id)
 
@@ -71,10 +76,13 @@ def test_create_user_comment(test_data):
         logger.error("Comment creation failed: %s", created_comment)
         pytest.fail("Comment creation failed due to invalid token")
 
-    check(created_comment["name"] == comment_data["name"], "Comment name should be created correctly")
-    check(created_comment["email"] == comment_data["email"], "Comment email should be created correctly")
-    check(created_comment["body"] == comment_data["body"], "Comment body should be created correctly")
-    check(created_comment["id"] is not None, "Comment ID should not be None or empty")
+    check(created_comment["name"] == comment_data["name"],
+          "Comment name should be created correctly")
+    check(created_comment["email"] == comment_data["email"],
+          "Comment email should be created correctly")
+    check(created_comment["body"] == comment_data["body"],
+          "Comment body should be created correctly")
+    check(created_comment["id"] is not None, "Comment ID should not be None")
     logger.info("Comment created successfully for post ID: %s", post_id)
 
     # Consume and print errors if any
@@ -83,6 +91,7 @@ def test_create_user_comment(test_data):
 
     # Return user_id and post_id for use in other tests
     return user_id, post_id
+
 
 def test_get_user_comments(test_data):
     """
@@ -95,10 +104,12 @@ def test_get_user_comments(test_data):
     # Retrieve the comments for the post
     post_comments = get_post_comments(post_id, check)
     check(len(post_comments) > 0, "Post should have at least one comment")
-    check(post_comments[0]["name"] == "Test User Comments", "Retrieved comment name should match the created comment name")
-    check(post_comments[0]["body"] == "Sample comment body.", "Retrieved comment body should match the created comment body")
-    logger.info("Post comments retrieved successfully for post ID: %s", post_id)
- 
+    check(post_comments[0]["name"] == "Test User Comments",
+          "Retrieved comment name should match the created comment name")
+    check(post_comments[0]["body"] == "Sample comment body.",
+          "Retrieved comment body should match the created comment body")
+    logger.info("Post comments retrieved for post ID: %s", post_id)
+
     # Consume and print errors if any
     errors = check.consume_errors()
     check(not errors, f"Errors occurred: {errors}")

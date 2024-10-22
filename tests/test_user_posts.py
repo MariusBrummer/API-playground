@@ -1,8 +1,8 @@
 import json
 from pathlib import Path
 import pytest
-import uuid
-from utils.commands import create_user, create_user_post, get_user_posts, cleanup_user
+from utils.commands import (create_user, create_user_post, get_user_posts,
+                            cleanup_user)
 from utils.check import Check
 import logging
 
@@ -10,6 +10,7 @@ import logging
 json_repo_dir = Path("json_repo")
 
 logger = logging.getLogger(__name__)
+
 
 @pytest.fixture(scope="module", params=["users.json"])
 def test_data(request):
@@ -24,6 +25,7 @@ def test_data(request):
         data = json.load(f)
         logger.info("Test data loaded: %s", data)
         yield data
+
 
 def test_create_user_post(test_data):
     """
@@ -44,9 +46,11 @@ def test_create_user_post(test_data):
         "body": "This is a sample post body."
     }
     created_post = create_user_post(user_id, post_data, check)
-    check(created_post["title"] == post_data["title"], "Post title should be created correctly")
-    check(created_post["body"] == post_data["body"], "Post body should be created correctly")
-    check(created_post["id"] is not None, "Post ID should not be None or empty")
+    check(created_post["title"] == post_data["title"],
+          "Post title should be created correctly")
+    check(created_post["body"] == post_data["body"],
+          "Post body should be created correctly")
+    check(created_post["id"] is not None, "Post ID should not be None")
     logger.info("Post created successfully for user ID: %s", user_id)
 
     # Consume and print errors if any
@@ -55,6 +59,7 @@ def test_create_user_post(test_data):
 
     # Return user_id and post_data for use in other tests
     return user_id, post_data
+
 
 def test_get_user_posts(test_data):
     """
@@ -67,8 +72,10 @@ def test_get_user_posts(test_data):
     # Retrieve the posts for the user
     user_posts = get_user_posts(user_id, check)
     check(len(user_posts) > 0, "User should have at least one post")
-    check(user_posts[0]["title"] == post_data["title"], "Retrieved post title should match the created post title")
-    check(user_posts[0]["body"] == post_data["body"], "Retrieved post body should match the created post body")
+    check(user_posts[0]["title"] == post_data["title"],
+          "Retrieved post title should match the created post title")
+    check(user_posts[0]["body"] == post_data["body"],
+          "Retrieved post body should match the created post body")
     logger.info("User posts retrieved successfully for user ID: %s", user_id)
 
     # Consume and print errors if any
