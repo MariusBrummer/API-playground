@@ -7,10 +7,7 @@ log = logging.getLogger(__name__)
 
 
 class Check:
-    """Simple object that is used for delayed checks in tests.
-
-    It is supposed to be used from "check" fixture.
-    """
+    """Simple object that is used for delayed checks in tests."""
 
     def __init__(self):
         self._errors = []
@@ -43,11 +40,7 @@ class Check:
                 del frame
 
     def consume_errors(self) -> List[str]:
-        """Consume all errors collected so far.
-
-        This method is used by pytest plugin and should not be used in tests
-        in normal circumstances.
-        """
+        """Consume all errors collected so far."""
         errors = self._errors
         self._errors = []
         return errors
