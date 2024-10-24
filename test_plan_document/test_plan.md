@@ -3,6 +3,7 @@
 ## 1. Introduction & Objective
 
 ### Objective
+
 The objective of this test plan is to ensure the successful integration of the third-party payment gateway into the e-commerce platform. This includes verifying that the payment gateway functions as intended, processing payments securely and accurately. Both functional and non-functional requirements will be validated, including:
 
 - Payment processing for various methods (credit cards, debit cards, digital wallets).
@@ -154,6 +155,9 @@ Handling changes during the testing phase requires a flexible and structured app
 - **Regression Testing**: Ensure that new changes do not break existing functionality by running relevant regression tests.
 - **Stakeholder Communication**: Keep stakeholders informed about changes in testing scope, timelines, or risks to manage expectations effectively.
 
-## 9. Conclusion
+## 9. Prioritization of Test Cases
 
-This test plan outlines the approach to ensuring the successful integration of the payment gateway into the e-commerce platform. By following this structured plan, we aim to validate the functionality, security, and performance of the payment process, ensuring a smooth experience for end users.
+Criteria for Prioritization:
+- **Business Criticality:** Test cases related to essential functions, such as processing payments and handling refunds, will be prioritized first. These ensure that customers can complete transactions and that the platform complies with financial regulations.
+- **Risk Level:**  High-risk scenarios, such as network failures, API version mismatches, and security vulnerabilities, will be tested early to mitigate potential issues that could disrupt the payment process or expose sensitive data.
+- **Frequency of Use:** Common scenarios,
