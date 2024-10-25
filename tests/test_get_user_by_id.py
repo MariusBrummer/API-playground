@@ -47,7 +47,7 @@ def test_get_user_by_id(test_data):
 
     # Consume and print errors if any
     errors = check.consume_errors()
-    check(not errors, f"Errors occurred: {errors}")
+    assert not errors, f"Errors occurred: {errors}"
 
     # Clean up by deleting the created user
     cleanup_user(user_id, check)
