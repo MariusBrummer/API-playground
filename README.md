@@ -69,6 +69,19 @@ To run a specific test file, use:
 pytest tests/test_create_user.py
 ```
 
+For detailed logging, run this command
+
+```bash
+pytest -s tests
+```
+
+To generate an HTML report after the test, run this command
+
+```bash
+pytest tests --html=report.html --self-contained-html
+
+```
+
 ## Additional Information
 
 - Ensure the API base URL and headers are correctly configured in `commands.py`.
