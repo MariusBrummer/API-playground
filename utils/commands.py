@@ -201,4 +201,4 @@ def cleanup_user(user_id, check: Check):
 
         # Consume and print errors if any during deletion
         errors = check.consume_errors()
-        check(not errors, f"Errors occurred during deletion: {errors}")
+        assert not errors, f"Errors occurred during deletion: {errors}"
