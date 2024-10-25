@@ -63,6 +63,11 @@ Run the tests using `pytest`. You can execute all tests with the following comma
 pytest tests
 ```
 
+For detailed logging, run this command
+```bash
+pytest -s tests
+```
+
 To run a specific test file, use:
 
 ```bash
