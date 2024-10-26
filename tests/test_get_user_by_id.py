@@ -24,7 +24,6 @@ def test_data(request):
         logger.info("Test data loaded successfully.")
         yield data
 
-
 @pytest.fixture
 def user_data(test_data):
     """
@@ -40,12 +39,13 @@ def test_get_user_by_id(user_data, check):
     """
     # Create a user
     user_id, _ = create_user(user_data, check)
-    check(user_id is not None, "User ID should not be None.")
+    check(user_id is not None, f"User ID should not be None. Actual value: {user_id}")
     logger.info("User created successfully with ID: %s", user_id)
 
     # Retrieve the user by ID
     user_details = get_user_by_id(user_id, check)
-    check(user_details.get("id") == user_id, "Retrieved user ID should match the created user ID.")
+    check(user_details.get("id") == user_id, 
+          f"Retrieved user ID should match the created user ID. Expected: {user_id}, Actual: {user_details.get('id')}")
     logger.info("User retrieved successfully with ID: %s", user_id)
 
     # Check for any accumulated errors
