@@ -26,9 +26,9 @@ def test_data(request):
         yield data
 
 @pytest.fixture
-def user_with_post_and_comment(test_data, check):
+def user_with_post(test_data, check):
     """
-    Fixture to create a user, a post, and a comment for that post.
+    Fixture to create a user and a post for that user.
     Returns user_id and post_id for further tests.
     """
     # Set up user data
@@ -56,19 +56,31 @@ def user_with_post_and_comment(test_data, check):
         logger.error(f"Post creation failed: {created_post_response}")
         pytest.fail("Post creation failed due to invalid token.")
 
-    check(created_post_response.get("title") == post_data["title"], "Post title should be created correctly.")
-    check(created_post_response.get("body") == post_data["body"], "Post body should be created correctly.")
+    check(created_post_response.get("title") == post_data["title"],
+          f"Post title should be created correctly. Expected: {post_data['title']}, Actual: {created_post_response.get('title')}")
+    check(created_post_response.get("body") == post_data["body"],
+          f"Post body should be created correctly. Expected: {post_data['body']}, Actual: {created_post_response.get('body')}")
     check(created_post_response.get("id") is not None, "Post ID should not be None.")
     
     post_id = created_post_response["id"]
     logger.info(f"Post created successfully for user ID: {user_id}")
 
-    # Create a comment for the post
+    yield user_id, post_id
+
+    # Teardown: Clean up the user after the test
+    cleanup_user(user_id, check)
+
+def test_create_comment(user_with_post, check):
+    """
+    Test creating a comment for a post.
+    """
+    user_id, post_id = user_with_post
     comment_data = {
         "name": "Test User Comments",
         "email": f"{uuid.uuid4()}@example.com",
         "body": "Sample comment body."
     }
+
     created_comment_id, created_comment_response = create_post_comment(post_id, comment_data, check)
 
     # Check the comment response
@@ -76,34 +88,45 @@ def user_with_post_and_comment(test_data, check):
         logger.error(f"Comment creation failed: {created_comment_response}")
         pytest.fail("Comment creation failed due to invalid token.")
 
-    check(created_comment_response.get("name") == comment_data["name"], "Comment name should be created correctly.")
-    check(created_comment_response.get("email") == comment_data["email"], "Comment email should be created correctly.")
-    check(created_comment_response.get("body") == comment_data["body"], "Comment body should be created correctly.")
+    check(created_comment_response.get("name") == comment_data["name"],
+          f"Comment name should be created correctly. Expected: {comment_data['name']}, Actual: {created_comment_response.get('name')}")
+    check(created_comment_response.get("email") == comment_data["email"],
+          f"Comment email should be created correctly. Expected: {comment_data['email']}, Actual: {created_comment_response.get('email')}")
+    check(created_comment_response.get("body") == comment_data["body"],
+          f"Comment body should be created correctly. Expected: {comment_data['body']}, Actual: {created_comment_response.get('body')}")
     check(created_comment_response.get("id") is not None, "Comment ID should not be None.")
     logger.info(f"Comment created successfully for post ID: {post_id}")
 
-    # Verify no errors occurred during setup
+    # Confirm no errors occurred during creation
     errors = check.consume_errors()
-    assert not errors, f"Errors occurred during setup: {errors}"
+    assert not errors, f"Errors occurred during comment creation: {errors}"
 
-    # Teardown: Clean up the user after the test
-    yield user_id, post_id
-    cleanup_user(user_id, check)
-
-
-def test_get_user_comments(user_with_post_and_comment, check):
+def test_get_comments(user_with_post, check):
     """
-    Test the get_post_comments function.
+    Test retrieving comments for a post.
     """
-    user_id, post_id = user_with_post_and_comment
+    user_id, post_id = user_with_post
+
+    # Create a comment for the post first
+    comment_data = {
+        "name": "Test User Comments",
+        "email": f"{uuid.uuid4()}@example.com",
+        "body": "Sample comment body."
+    }
+    create_post_comment(post_id, comment_data, check)
 
     # Retrieve the comments for the post
     post_comments = get_post_comments(post_id, check)
     check(len(post_comments) > 0, "Post should have at least one comment.")
-    check(post_comments[0].get("name") == "Test User Comments", "Retrieved comment name should match the created comment name.")
-    check(post_comments[0].get("body") == "Sample comment body.", "Retrieved comment body should match the created comment body.")
+
+    # Check the retrieved comment
+    check(post_comments[0].get("name") == comment_data["name"],
+          f"Retrieved comment name should match the created comment name. Expected: '{comment_data['name']}', Actual: '{post_comments[0].get('name')}'")
+    check(post_comments[0].get("body") == comment_data["body"],
+          f"Retrieved comment body should match the created comment body. Expected: '{comment_data['body']}', Actual: '{post_comments[0].get('body')}'")
+
     logger.info(f"Post comments retrieved for post ID: {post_id}")
 
     # Confirm no errors occurred during retrieval
     errors = check.consume_errors()
-    assert not errors, f"Errors occurred: {errors}"
+    assert not errors, f"Errors occurred during comment retrieval: {errors}"

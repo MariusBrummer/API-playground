@@ -36,8 +36,8 @@ def test_update_user_details(test_data):
 
     # Create a user
     user_id, _ = create_user(user_data, check)
-    check(user_id is not None, "User ID should not be None.")
-    logger.info("User created successfully with ID: %s", user_id)
+    check(user_id is not None, f"User ID should not be None. Actual value: {user_id}")
+    logger.info(f"User created successfully with ID:{user_id}")
 
     # Prepare and update user details
     updated_data = {
@@ -47,9 +47,14 @@ def test_update_user_details(test_data):
         "status": "active"
     }
     updated_user_details = update_user_details(user_id, updated_data, check)
-    check(updated_user_details.get("name") == updated_data["name"], "User name should be updated.")
-    check(updated_user_details.get("email") == updated_data["email"], "User email should be updated.")
-    logger.info("User updated successfully with ID: %s", user_id)
+    
+    # Check the updated details and include actual values in error messages
+    check(updated_user_details.get("name") == updated_data["name"], 
+          f"User name should be updated. Expected: {updated_data['name']}, Actual: {updated_user_details.get('name')}")
+    check(updated_user_details.get("email") == updated_data["email"], 
+          f"User email should be updated. Expected: {updated_data['email']}, Actual: {updated_user_details.get('email')}")
+    
+    logger.info(f"User updated successfully with ID: {user_id}")
 
     # Check for errors and assert if any exist
     errors = check.consume_errors()
@@ -57,4 +62,4 @@ def test_update_user_details(test_data):
 
     # Clean up by deleting the created user
     cleanup_user(user_id, check)
-    logger.info("User cleanup completed for ID: %s", user_id)
+    logger.info(f"User cleanup completed for ID: {user_id}")
