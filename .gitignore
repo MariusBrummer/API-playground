@@ -38,6 +38,7 @@ coverage.xml
 *.cover
 *.py,cover
 .hypothesis/
+report.html
 
 # Virtualenv and Python environment
 env/
